@@ -2,6 +2,8 @@ import java.sql.*;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import javafx.scene.control.Alert;
+
 /**
  * @author Dilli
  * This class control the logic of the program.
@@ -12,7 +14,7 @@ public class Controller {
 	 * This method checks if username and password exist in the database.
 	 * If exist, it returns True, if not, returns false.
 	 */
-	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/javafx_login";
+	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/javafx_logi";
 	private static final String DATABASE_USER = "root"; //replace with your mysql database user
 	private static final String DATABASE_PSWD = "Saanvi2015"; //replace with your mysql database password
 	
@@ -39,13 +41,13 @@ public class Controller {
 			prestmt.setString(2, hashedPassword);
 			prestmt.executeUpdate();
 		}catch(SQLException e) {
-			System.err.println("Error connecting to database. " + e.getMessage());
+			showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to Connect to Database!");
 		}
 	}
 	protected boolean authenticateUser(String username, String password) {
 		String sqlQuery = "SELECT password FROM users WHERE username = ?";
-		try {
-			Connection conn = connectDatabase();
+		try
+			{Connection conn = connectDatabase();
 			PreparedStatement statement = conn.prepareStatement(sqlQuery);
 			statement.setString(1, username);
 			
@@ -53,11 +55,22 @@ public class Controller {
 			if(rs.next()) {
 				String storedHashedPwd = rs.getString("password");
 				return checkPassword(password, storedHashedPwd);
+			}else {
+				return false;
 			}
 		}catch(SQLException e) {
-			e.printStackTrace();
+			showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to Connect to Database!");
+			return false;
 		}
-		return false;
+	}
+	
+	private void showAlert(Alert.AlertType type, String title, String message) {
+		Alert alert = new Alert(type);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+		
 	}
 
 }
