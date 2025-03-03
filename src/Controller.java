@@ -12,20 +12,20 @@ public class Controller {
 	 * This method checks if username and password exist in the database.
 	 * If exist, it returns True, if not, returns false.
 	 */
-	String databaseURL = "jdbc:mysql://localhost:3306/javafx_login";
-	String databaseUser = "root"; //replace with your mysql database user
-	String databasePassword = "Saanvi2015"; //replace with your mysql database password
+	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/javafx_login";
+	private static final String DATABASE_USER = "root"; //replace with your mysql database user
+	private static final String DATABASE_PSWD = "Saanvi2015"; //replace with your mysql database password
 	
-	protected Connection connectDatabase() throws SQLException{
-		return DriverManager.getConnection(databaseURL, databaseUser,databasePassword);
+	private Connection connectDatabase() throws SQLException{
+		return DriverManager.getConnection(DATABASE_URL, DATABASE_USER,DATABASE_PSWD);
 		
 	}
 	
-	protected String hashPassword(String plainPassword) {
+	private String hashPassword(String plainPassword) {
 		return BCrypt.hashpw(plainPassword, BCrypt.gensalt(12));
 	}
 	
-	protected boolean checkPassword(String plainPassword, String hashPassword) {
+	private boolean checkPassword(String plainPassword, String hashPassword) {
 		return BCrypt.checkpw(plainPassword, hashPassword);
 	}
 	

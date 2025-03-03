@@ -31,7 +31,7 @@ public class Login extends Application{
 			if(controller.authenticateUser(username, password)) {
 				messageLabel.setText("Login Successful!");
 			}else {
-				messageLabel.setText("Login Failed! Check your username and/or password.");
+				messageLabel.setText("Invalid username or password!");
 			}
 			userNameField.clear();
 			passwordField.clear();
