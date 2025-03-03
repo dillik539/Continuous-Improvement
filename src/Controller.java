@@ -14,7 +14,7 @@ public class Controller {
 	 * This method checks if username and password exist in the database.
 	 * If exist, it returns True, if not, returns false.
 	 */
-	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/javafx_logi";
+	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/javafx_login";
 	private static final String DATABASE_USER = "root"; //replace with your mysql database user
 	private static final String DATABASE_PSWD = "Saanvi2015"; //replace with your mysql database password
 	
@@ -54,8 +54,16 @@ public class Controller {
 			ResultSet rs = statement.executeQuery();
 			if(rs.next()) {
 				String storedHashedPwd = rs.getString("password");
-				return checkPassword(password, storedHashedPwd);
+				if(!checkPassword(password, storedHashedPwd)) {
+					showAlert(Alert.AlertType.WARNING, "User Authentication", "Login Failed!");
+					return false;
+				}else {
+					showAlert(Alert.AlertType.INFORMATION, "User Authentication", "Login Successfull!");
+					return true;
+				}
+		
 			}else {
+				showAlert(Alert.AlertType.WARNING, "No User", "No user found! Please register.");
 				return false;
 			}
 		}catch(SQLException e) {
