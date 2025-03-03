@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
@@ -20,6 +21,9 @@ public class Login extends Application{
 		Button loginButton = new Button("Login");
 		Label messageLabel = new Label();
 		
+		Label registerLabel = new Label("Not registered? Click the button below.");
+		Button registerButton = new Button("Register");
+		
 		loginButton.setOnAction(e -> {
 			String username = userNameField.getText();
 			String password = passwordField.getText();
@@ -29,16 +33,33 @@ public class Login extends Application{
 			}else {
 				messageLabel.setText("Login Failed! Check your username and/or password.");
 			}
+			userNameField.clear();
+			passwordField.clear();
+		});
+		
+		registerButton.setOnAction(e -> {
+			String registerUsername = userNameField.getText();
+			String registerPassword = passwordField.getText();
+			
+			if(!registerUsername.isEmpty() && !registerPassword.isEmpty()) {
+				controller.registerUser(registerUsername, registerPassword);
+				messageLabel.setText("User Successfully registered!");
+			}else {
+				messageLabel.setText("Username and Password cannot be empty.");
+			}
+			userNameField.clear();
+			passwordField.clear();
+			
 		});
 		
 		//layout
 		
 		VBox layout = new VBox(10); //sets each element vertically with spacing of 10 pixels.
-		layout.getChildren().addAll(userName, userNameField, passwordLabel, passwordField, loginButton, messageLabel);
-		
+		layout.getChildren().addAll(userName, userNameField, passwordLabel, passwordField, loginButton, registerLabel, registerButton, messageLabel);
+		layout.setAlignment(Pos.CENTER);
 		//establish scene
 		
-		Scene scene = new Scene(layout, 300, 200);
+		Scene scene = new Scene(layout, 300, 250);
 		primaryStage.setTitle("Login");
 		primaryStage.setScene(scene);
 		primaryStage.show();
