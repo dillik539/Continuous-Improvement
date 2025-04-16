@@ -103,13 +103,13 @@ public class IdeaController {
 		 **/
 		ObservableList<Idea> ideas = FXCollections.observableArrayList();
 		try (Connection conn = Database.getConnection()) {
-			String ideaQuery = "SELECT short_description, idea_text, date_submitted, status FROM ideas WHERE user_id= ?";
+			String ideaQuery = "SELECT user_id, short_description, idea_text, date_submitted, status FROM ideas WHERE user_id= ?";
 			int userId = findUserId(username);
 			PreparedStatement stmt = conn.prepareStatement(ideaQuery);
 			stmt.setInt(1, userId);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				ideas.add(new Idea(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+				ideas.add(new Idea(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
 			}
 		} catch (
 

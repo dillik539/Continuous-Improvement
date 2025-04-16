@@ -59,7 +59,7 @@ public class AdminController {
 			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM ideas");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				ideas.add(new Idea(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+				ideas.add(new Idea(rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
