@@ -46,6 +46,7 @@ public class IdeaController {
 	}
 
 	private void setupTable() {
+		TableColumn<Idea, Integer> userIdCol = new TableColumn<>("User ID");
 		TableColumn<Idea, String> shortDescCol = new TableColumn<>("Short Description");
 		shortDescCol
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getShortDescription()));
@@ -59,7 +60,7 @@ public class IdeaController {
 		TableColumn<Idea, String> statusCol = new TableColumn<>("Status");
 		statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
-		ideaTable.getColumns().addAll(shortDescCol, descCol, dateCol, statusCol);
+		ideaTable.getColumns().addAll(userIdCol,shortDescCol, descCol, dateCol, statusCol);
 	}
 
 	private void submitIdea() {
