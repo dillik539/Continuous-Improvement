@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,6 +48,8 @@ public class IdeaController {
 
 	private void setupTable() {
 		TableColumn<Idea, Integer> userIdCol = new TableColumn<>("User ID");
+		//asObject() wraps the primitive int property returned by getUserID() to make it an Integer object.
+		userIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getUserID()).asObject());
 		TableColumn<Idea, String> shortDescCol = new TableColumn<>("Short Description");
 		shortDescCol
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getShortDescription()));
