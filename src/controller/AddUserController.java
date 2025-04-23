@@ -28,7 +28,7 @@ public class AddUserController {
 		usernameField = new TextField();
 		passwordField = new PasswordField();
 		roleComboBox = new ComboBox<>();
-		roleComboBox.getItems().addAll("User", "Admin");
+		roleComboBox.getItems().addAll("User", "Admin", "Team Lead", "Supervisor", "Manager");
 
 		Button addButton = new Button("Add");
 		Button cancelButton = new Button("Cancel");
