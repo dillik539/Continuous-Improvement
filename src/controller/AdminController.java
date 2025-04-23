@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +38,9 @@ public class AdminController {
 	}
 
 	private void setupTable() {
+		TableColumn<Idea, Integer> userIdCol = new TableColumn<>("Submitted By");
+		//asObject() wraps the primitive int property returned by getUserID() to make it an Integer object.
+		userIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getUserID()).asObject());
 		TableColumn<Idea, String> shortDescCol = new TableColumn<>("Short Description");
 		shortDescCol
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getShortDescription()));
@@ -50,13 +54,13 @@ public class AdminController {
 		TableColumn<Idea, String> statusCol = new TableColumn<>("Status");
 		statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
-		ideaTable.getColumns().addAll(shortDescCol, descCol, dateCol, statusCol);
+		ideaTable.getColumns().addAll(userIdCol,shortDescCol, descCol, dateCol, statusCol);
 	}
 
 	private void loadIdeas() {
 		ObservableList<Idea> ideas = FXCollections.observableArrayList();
 		try (Connection conn = Database.getConnection()) {
-			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM ideas");
+			PreparedStatement stmt = conn.prepareStatement("SELECT user_id, short_description, idea_text, date_submitted, status FROM ideas");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				ideas.add(new Idea(rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)));
@@ -75,8 +79,8 @@ public class AdminController {
 
 		try (Connection conn = Database.getConnection()) {
 			PreparedStatement stmt = conn
-					.prepareStatement("UPDATE ideas SET status = 'Processed' WHERE description = ?");
-			stmt.setString(1, selectedIdea.getShortDescription());
+					.prepareStatement("UPDATE ideas SET status = 'Processed' WHERE user_id = ?");
+			stmt.setInt(1, selectedIdea.getUserID());
 			stmt.executeUpdate();
 			loadIdeas();
 		} catch (Exception e) {
