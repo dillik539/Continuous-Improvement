@@ -18,21 +18,19 @@ import model.Database;
 import model.Idea;
 
 public class AdminController {
-	private Stage adminStage;
 	private TableView<Idea> ideaTable;
+	private VBox layout;
 
 	public AdminController() {
-		adminStage = new Stage();
-		adminStage.setTitle("Admin Panel");
+		layout = new VBox(10);
 
 		ideaTable = new TableView<>();
 		setupTable();
 
 		Button processButton = new Button("Process Idea");
 		processButton.setOnAction(e -> processIdea());
-
-		VBox layout = new VBox(10, ideaTable, processButton);
-		adminStage.setScene(new Scene(layout, 500, 400));
+		
+		layout.getChildren().addAll(ideaTable, processButton);
 
 		loadIdeas();
 	}
@@ -63,7 +61,7 @@ public class AdminController {
 			PreparedStatement stmt = conn.prepareStatement("SELECT user_id, short_description, idea_text, date_submitted, status FROM ideas");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				ideas.add(new Idea(rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)));
+				ideas.add(new Idea(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,8 +77,9 @@ public class AdminController {
 
 		try (Connection conn = Database.getConnection()) {
 			PreparedStatement stmt = conn
-					.prepareStatement("UPDATE ideas SET status = 'Processed' WHERE user_id = ?");
+					.prepareStatement("UPDATE ideas SET status = 'Processed' WHERE user_id = ? AND short_description = ?");
 			stmt.setInt(1, selectedIdea.getUserID());
+			stmt.setString(2, selectedIdea.getShortDescription());
 			stmt.executeUpdate();
 			loadIdeas();
 		} catch (Exception e) {
@@ -88,7 +87,7 @@ public class AdminController {
 		}
 	}
 
-	public void show() {
-		adminStage.show();
+	public VBox getView() {
+		return layout;
 	}
 }
