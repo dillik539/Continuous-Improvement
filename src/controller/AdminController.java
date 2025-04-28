@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -14,6 +16,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Database;
 import model.Idea;
 
@@ -32,7 +35,8 @@ public class AdminController {
 		
 		layout.getChildren().addAll(ideaTable, processButton);
 
-		loadIdeas();
+		loadIdeas();//load ideas from the database initially
+		startAutoRefresh(); //auto refresh periodically.
 	}
 
 	private void setupTable() {
@@ -89,5 +93,10 @@ public class AdminController {
 
 	public VBox getView() {
 		return layout;
+	}
+	private void startAutoRefresh() {
+		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> loadIdeas()));
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.play();
 	}
 }

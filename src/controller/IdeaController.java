@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -17,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import model.Database;
 import model.Idea;
 
@@ -42,8 +45,10 @@ public class IdeaController {
 
 		layout.getChildren().addAll(new Label("Short Description"), shortDescriptionField, new Label("Your Idea"),
 				ideaArea, submitButton, new Label("Your Ideas"), ideaTable);
-
-		loadIdeas();
+		
+		loadIdeas();//Load ideas initailly from the database
+		startAutoRefresh(); //refresh loaded data periodically to reflect all ideas added including the recentones from the database
+	
 	}
 
 	private void setupTable() {
@@ -147,5 +152,10 @@ public class IdeaController {
 			e.printStackTrace();
 		}
 		return userId;
+	}
+	private void startAutoRefresh() {
+		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> loadIdeas()));
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.play();
 	}
 }
