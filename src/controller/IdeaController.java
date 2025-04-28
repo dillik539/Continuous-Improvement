@@ -91,6 +91,7 @@ public class IdeaController {
 			stmt.setString(4, formattedCurrentDateTime);
 			stmt.setString(5, "Pending");
 			stmt.executeUpdate();
+			clearFields(); //clear all fields to prevent submitting duplicate ideas.
 			loadIdeas();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,5 +158,9 @@ public class IdeaController {
 		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> loadIdeas()));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
+	}
+	private void clearFields() {
+		shortDescriptionField.clear();
+		ideaArea.clear();
 	}
 }
