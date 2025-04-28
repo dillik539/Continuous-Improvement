@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -72,22 +73,39 @@ public class IdeaController {
 	}
 
 	private void submitIdea() {
-		int userId = findUserId(username);
+		
+		String shortDesc = shortDescriptionField.getText().trim();
+		String ideaText = ideaArea.getText().trim();
 
+		
+		if(shortDesc.isEmpty() && ideaText.isEmpty()) {
+			showAlert("Submission Error", "Both 'Short Description' and 'Your Idea' cannot be empty!");
+			return;
+		}
+		if(shortDesc.isEmpty()) {
+			showAlert("Submission Error", "Short Description cannot be empty!");
+			return;
+		}
+		if(ideaText.isEmpty()) {
+			showAlert("Submission Error", "Your Idea field cannot be empty!");
+			return;
+		}
+		int userId = findUserId(username);
 		// get the current date and time in format: yyyy-MM-ddTHH:mm:ss. T = time
 		LocalDateTime now = LocalDateTime.now();
 
 		/*
-		 * change dateTime in the specified format of type String.Format pattern
-		 * yyyy-MM-dd HH:mm:ss.
-		 */
+			* change dateTime in the specified format of type String.Format pattern
+			* yyyy-MM-dd HH:mm:ss.
+		*/
 		String formattedCurrentDateTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		
 		try (Connection conn = Database.getConnection()) {
 			PreparedStatement stmt = conn.prepareStatement(
 					"INSERT INTO ideas (user_id, short_description, idea_text, date_submitted, status) VALUES (?, ?, ?, ?, ?)");
 			stmt.setInt(1, userId);
-			stmt.setString(2, shortDescriptionField.getText());
-			stmt.setString(3, ideaArea.getText());
+			stmt.setString(2, shortDesc);
+			stmt.setString(3, ideaText);
 			stmt.setString(4, formattedCurrentDateTime);
 			stmt.setString(5, "Pending");
 			stmt.executeUpdate();
@@ -162,5 +180,13 @@ public class IdeaController {
 	private void clearFields() {
 		shortDescriptionField.clear();
 		ideaArea.clear();
+	}
+	
+	private void showAlert(String title, String message) {
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
 	}
 }
