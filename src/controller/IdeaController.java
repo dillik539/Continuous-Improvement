@@ -30,6 +30,8 @@ public class IdeaController {
 	private TextField shortDescriptionField;
 	private TextArea ideaArea;
 	private TableView<Idea> ideaTable;
+	private Label lastRefreshedLabel;
+	private Button refreshButton;
 
 	public IdeaController(String username) {
 		this.username = username;
@@ -37,6 +39,10 @@ public class IdeaController {
 
 		shortDescriptionField = new TextField();
 		ideaArea = new TextArea();
+		
+		lastRefreshedLabel = new Label();
+		refreshButton = new Button("Refresh Now");
+		refreshButton.setOnAction(e -> loadIdeas());
 
 		Button submitButton = new Button("Submit");
 		submitButton.setOnAction(e -> submitIdea());
@@ -45,7 +51,7 @@ public class IdeaController {
 		setupTable();
 
 		layout.getChildren().addAll(new Label("Short Description"), shortDescriptionField, new Label("Your Idea"),
-				ideaArea, submitButton, new Label("Your Ideas"), ideaTable);
+				ideaArea, submitButton,refreshButton, lastRefreshedLabel, new Label("Your Ideas"), ideaTable);
 		
 		loadIdeas();//Load ideas initailly from the database
 		startAutoRefresh(); //refresh loaded data periodically to reflect all ideas added including the recentones from the database
@@ -145,6 +151,7 @@ public class IdeaController {
 			e.printStackTrace();
 		}
 		ideaTable.setItems(ideas);
+		lastRefreshedLabel.setText("Last Refreshed at: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 
 	}
 

@@ -3,6 +3,8 @@ package controller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -12,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
@@ -23,17 +26,24 @@ import model.Idea;
 public class AdminController {
 	private TableView<Idea> ideaTable;
 	private VBox layout;
+	private Label lastRefreshedLabel;
+	private Button refreshButton;
 
 	public AdminController() {
 		layout = new VBox(10);
 
 		ideaTable = new TableView<>();
 		setupTable();
+		
+		refreshButton = new Button("Refresh Now");
+		refreshButton.setOnAction(e -> loadIdeas());
+		
+		lastRefreshedLabel = new Label();
 
 		Button processButton = new Button("Process Idea");
 		processButton.setOnAction(e -> processIdea());
 		
-		layout.getChildren().addAll(ideaTable, processButton);
+		layout.getChildren().addAll(refreshButton, lastRefreshedLabel, ideaTable, processButton);
 
 		loadIdeas();//load ideas from the database initially
 		startAutoRefresh(); //auto refresh periodically.
@@ -71,6 +81,7 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		ideaTable.setItems(ideas);
+		lastRefreshedLabel.setText("Last refreshed at: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 	}
 
 	private void processIdea() {
