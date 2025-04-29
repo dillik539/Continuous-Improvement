@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -28,6 +29,7 @@ public class AdminController {
 	private VBox layout;
 	private Label lastRefreshedLabel;
 	private Button refreshButton;
+	private int previousIdeaCount = 0;
 
 	public AdminController() {
 		layout = new VBox(10);
@@ -82,6 +84,11 @@ public class AdminController {
 		}
 		ideaTable.setItems(ideas);
 		lastRefreshedLabel.setText("Last refreshed at: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+		
+		if(ideas.size() > previousIdeaCount) {
+			showNewIdeaNotification(ideas.size() - previousIdeaCount);
+		}
+		previousIdeaCount = ideas.size();
 	}
 
 	private void processIdea() {
@@ -109,5 +116,13 @@ public class AdminController {
 		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> loadIdeas()));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
+	}
+	
+	private void showNewIdeaNotification(int newCount) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("New Ideas Detected");
+		alert.setHeaderText(null);
+		alert.setContentText("There are " + newCount + " new idea(s) since the last check.");
+		alert.show();
 	}
 }

@@ -32,6 +32,7 @@ public class IdeaController {
 	private TableView<Idea> ideaTable;
 	private Label lastRefreshedLabel;
 	private Button refreshButton;
+	private int previousIdeaCount = 0;
 
 	public IdeaController(String username) {
 		this.username = username;
@@ -152,6 +153,12 @@ public class IdeaController {
 		}
 		ideaTable.setItems(ideas);
 		lastRefreshedLabel.setText("Last Refreshed at: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+		
+		//Detect if any new ideas are added
+		if(ideas.size() > previousIdeaCount) {
+			showNewIdeaNotification(ideas.size() - previousIdeaCount);
+		}
+		previousIdeaCount = ideas.size();
 
 	}
 
@@ -195,5 +202,12 @@ public class IdeaController {
 		alert.setHeaderText(null);
 		alert.setContentText(message);
 		alert.showAndWait();
+	}
+	private void showNewIdeaNotification(int newCount) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("New Idea Detected");
+		alert.setHeaderText(null);
+		alert.setContentText("There are " + newCount + " new idea(s) since the last refresh.");
+		alert.show();
 	}
 }
