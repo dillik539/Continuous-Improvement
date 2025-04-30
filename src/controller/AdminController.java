@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Database;
 import model.Idea;
+import util.ToastUtils;
 
 public class AdminController {
 	private TableView<Idea> ideaTable;
@@ -86,7 +87,9 @@ public class AdminController {
 		lastRefreshedLabel.setText("Last refreshed at: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 		
 		if(ideas.size() > previousIdeaCount) {
-			showNewIdeaNotification(ideas.size() - previousIdeaCount);
+			int newCount = ideas.size() - previousIdeaCount;
+			ToastUtils.showToast(layout.getScene(), newCount + " new idea(s) detected.");
+			
 		}
 		previousIdeaCount = ideas.size();
 	}
@@ -116,13 +119,5 @@ public class AdminController {
 		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> loadIdeas()));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
-	}
-	
-	private void showNewIdeaNotification(int newCount) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setTitle("New Ideas Detected");
-		alert.setHeaderText(null);
-		alert.setContentText("There are " + newCount + " new idea(s) since the last check.");
-		alert.show();
 	}
 }

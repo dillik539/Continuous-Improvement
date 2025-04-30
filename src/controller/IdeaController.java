@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.Database;
 import model.Idea;
+import util.ToastUtils;
 
 public class IdeaController {
 	private String username;
@@ -118,6 +119,7 @@ public class IdeaController {
 			stmt.executeUpdate();
 			clearFields(); //clear all fields to prevent submitting duplicate ideas.
 			loadIdeas();
+			ToastUtils.showToast(layout.getScene(), "Your idea was submitted");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -156,7 +158,8 @@ public class IdeaController {
 		
 		//Detect if any new ideas are added
 		if(ideas.size() > previousIdeaCount) {
-			showNewIdeaNotification(ideas.size() - previousIdeaCount);
+			int newCount = ideas.size() - previousIdeaCount;
+			ToastUtils.showToast(layout.getScene(), newCount + " new idea(s) detected.");
 		}
 		previousIdeaCount = ideas.size();
 
@@ -203,11 +206,5 @@ public class IdeaController {
 		alert.setContentText(message);
 		alert.showAndWait();
 	}
-	private void showNewIdeaNotification(int newCount) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setTitle("New Idea Detected");
-		alert.setHeaderText(null);
-		alert.setContentText("There are " + newCount + " new idea(s) since the last refresh.");
-		alert.show();
-	}
+
 }
