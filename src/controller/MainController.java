@@ -1,11 +1,16 @@
 package controller;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
@@ -19,8 +24,9 @@ import model.User;
 public class MainController {
 	private Stage primaryStage;
 	private BorderPane root;
-	private MenuItem loginMenuItem;
-	private MenuItem logoutMenuItem;
+	private MenuBar menuBar;
+	private Button loginButton;
+	private Button logoutButton;
 	private Label userLabel;
 	private String username;
 	private String role;
@@ -34,28 +40,46 @@ public class MainController {
 	}
 	
 	private void setupMenuBar() {
-		//TO DO: add login and logout menus with their functionalities.
-		MenuBar menuBar = new MenuBar();
-		Menu menu = new Menu("User");
-		
-		loginMenuItem = new MenuItem("Login");
-		logoutMenuItem = new MenuItem("Logout");
-		logoutMenuItem.setDisable(true);
-		
-		loginMenuItem.setOnAction(e -> openLoginWindow());
-		logoutMenuItem.setOnAction(e -> handleLogout());
-		
-		menu.getItems().addAll(loginMenuItem, logoutMenuItem);
-		menuBar.getMenus().add(menu);
-		
-		//userLabel = new Label("Welcome to the Idea Submission App");
-		root.setTop(menuBar);
-		//root.setCenter(userLabel);
+	    menuBar = new MenuBar();
+	    menuBar.setStyle("-fx-background-color: #ADD8E6;"); // Optional if you want to color MenuBar too
+
+	    HBox menuBox = new HBox(10);
+	    menuBox.setPadding(new Insets(5));
+	    menuBox.setAlignment(Pos.CENTER_LEFT);
+	    menuBox.setStyle("-fx-background-color: #ADD8E6;"); // Color the bar
+	       
+	    loginButton = new Button("Login");
+	    logoutButton = new Button("Logout");
+	    logoutButton.setDisable(true);
+
+	    // Optional button styling
+	    String buttonStyle = "-fx-background-color: white; -fx-text-fill: #005f87; -fx-font-weight: bold;";
+	    loginButton.setStyle(buttonStyle);
+	    logoutButton.setStyle(buttonStyle);
+
+	    loginButton.setOnAction(e -> openLoginWindow());
+	    logoutButton.setOnAction(e -> handleLogout());
+
+	    Region spacer = new Region();
+	    HBox.setHgrow(spacer, Priority.ALWAYS);
+
+	    userLabel = new Label();
+	    userLabel.setStyle("-fx-text-fill: #003f5c; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+	    menuBox.getChildren().addAll(loginButton, logoutButton, spacer, userLabel);
+
+	    VBox topBox = new VBox(menuBar, menuBox);
+	    root.setTop(topBox);
 	}
+
+
 	private void setupWelcomePage() {
-		userLabel = new Label();
-		userLabel.setText("Welcome to the Idea Submission app!\nPlease login to submit your ideas.");
-		root.setCenter(userLabel);
+		if (userLabel != null) {
+			userLabel.setText(""); //Clear the top-right label
+		}
+		Label welcomeLabel = new Label();
+		welcomeLabel.setText("Welcome to the Idea Submission app!\nPlease login to submit your ideas.");
+		root.setCenter(welcomeLabel);//separate label for center content
 			
 	}
 	private void openLoginWindow() {
@@ -79,8 +103,8 @@ public class MainController {
 	 * Role-based page loading after login.
 	 */
 	public void handleLogin(User user) {
-		loginMenuItem.setDisable(true);
-		logoutMenuItem.setDisable(false);
+		loginButton.setDisable(true);
+		logoutButton.setDisable(false);
 		
 		username = user.getUsername();
 		role = user.getRole().toLowerCase();
@@ -111,8 +135,8 @@ public class MainController {
 		}
 	}
 	private void handleLogout() {
-		loginMenuItem.setDisable(false);
-		logoutMenuItem.setDisable(true);
+		loginButton.setDisable(false);
+		logoutButton.setDisable(true);
 		setupWelcomePage();
 	}
 	
