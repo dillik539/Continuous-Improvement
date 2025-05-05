@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,6 +24,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Database;
 import model.Idea;
+import util.TableRowHighlighter;
 import util.ToastUtils;
 
 public class AdminController {
@@ -83,13 +85,14 @@ public class AdminController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		int newCount = ideas.size() - previousIdeaCount;
 		ideaTable.setItems(ideas);
 		lastRefreshedLabel.setText("Last refreshed at: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 		
-		if(ideas.size() > previousIdeaCount) {
-			int newCount = ideas.size() - previousIdeaCount;
+		if(newCount > 0) {
 			ToastUtils.showToast(layout.getScene(), newCount + " new idea(s) detected.");
-			
+			highlightNewRows(newCount);
+
 		}
 		previousIdeaCount = ideas.size();
 	}
@@ -119,5 +122,17 @@ public class AdminController {
 		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> loadIdeas()));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();
+	}
+	
+	private void highlightNewRows(int count) {
+		//wait until table view has its new rows displayed.
+		PauseTransition delay = new PauseTransition(Duration.millis(200));
+		delay.setOnFinished(e -> {
+			int totalRows = ideaTable.getItems().size();
+			for (int i = totalRows - count; i < totalRows; i++) {
+				TableRowHighlighter.highlightRow(ideaTable, i);
+			}
+		});
+		delay.play();
 	}
 }

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,15 +20,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.Database;
 import model.Idea;
-import util.ToastUtils;
+import util.*;
 
 public class IdeaController {
 	private String username;
-	private VBox layout;
+	private HBox mainLayout;
+	private VBox ideaLayout;
+	private VBox viewLayout;
 	private TextField shortDescriptionField;
 	private TextArea ideaArea;
 	private TableView<Idea> ideaTable;
@@ -37,7 +41,9 @@ public class IdeaController {
 
 	public IdeaController(String username) {
 		this.username = username;
-		layout = new VBox(10);
+		mainLayout = new HBox(10);
+		ideaLayout = new VBox(10);
+		viewLayout = new VBox(10);
 
 		shortDescriptionField = new TextField();
 		ideaArea = new TextArea();
@@ -51,9 +57,11 @@ public class IdeaController {
 
 		ideaTable = new TableView<>();
 		setupTable();
-
-		layout.getChildren().addAll(new Label("Short Description"), shortDescriptionField, new Label("Your Idea"),
-				ideaArea, submitButton,refreshButton, lastRefreshedLabel, new Label("Your Ideas"), ideaTable);
+		ideaLayout.getChildren().addAll(new Label("Short Description"), shortDescriptionField, new Label("Full Idea"), ideaArea, submitButton);
+		viewLayout.getChildren().addAll(refreshButton, lastRefreshedLabel, new Label("Your Ideas"), ideaTable);
+		mainLayout.getChildren().addAll(ideaLayout, viewLayout);
+//		layout.getChildren().addAll(new Label("Short Description"), shortDescriptionField, new Label("Your Idea"),
+//				ideaArea, submitButton,refreshButton, lastRefreshedLabel, new Label("Your Ideas"), ideaTable);
 		
 		loadIdeas();//Load ideas initailly from the database
 		startAutoRefresh(); //refresh loaded data periodically to reflect all ideas added including the recentones from the database
@@ -119,7 +127,7 @@ public class IdeaController {
 			stmt.executeUpdate();
 			clearFields(); //clear all fields to prevent submitting duplicate ideas.
 			loadIdeas();
-			ToastUtils.showToast(layout.getScene(), "Your idea was submitted");
+			ToastUtils.showToast(mainLayout.getScene(), "Your idea was submitted");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -153,20 +161,24 @@ public class IdeaController {
 		Exception e) {
 			e.printStackTrace();
 		}
+		
+		int newCount = ideas.size() - previousIdeaCount;
 		ideaTable.setItems(ideas);
+		
 		lastRefreshedLabel.setText("Last Refreshed at: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 		
 		//Detect if any new ideas are added
-		if(ideas.size() > previousIdeaCount) {
-			int newCount = ideas.size() - previousIdeaCount;
-			ToastUtils.showToast(layout.getScene(), newCount + " new idea(s) detected.");
+		if(newCount > 0) {
+			
+			ToastUtils.showToast(mainLayout.getScene(), newCount + " new idea(s) detected.");
+			highlightNewRows(newCount);
 		}
 		previousIdeaCount = ideas.size();
 
 	}
 
-	public VBox getView() {
-		return layout;
+	public HBox getView() {
+		return mainLayout;
 	}
 
 	private int findUserId(String username) {
@@ -205,6 +217,18 @@ public class IdeaController {
 		alert.setHeaderText(null);
 		alert.setContentText(message);
 		alert.showAndWait();
+	}
+	
+	private void highlightNewRows(int count) {
+		//wait until table view has its new rows displayed.
+		PauseTransition delay = new PauseTransition(Duration.millis(200));
+		delay.setOnFinished(e -> {
+			int totalRows = ideaTable.getItems().size();
+			for (int i = totalRows - count; i < totalRows; i++) {
+				TableRowHighlighter.highlightRow(ideaTable, i);
+			}
+		});
+		delay.play();
 	}
 
 }

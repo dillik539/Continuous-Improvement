@@ -48,12 +48,13 @@ public class MainController {
 		menu.getItems().addAll(loginMenuItem, logoutMenuItem);
 		menuBar.getMenus().add(menu);
 		
-		userLabel = new Label("Welcome to the Idea Submission App");
+		//userLabel = new Label("Welcome to the Idea Submission App");
 		root.setTop(menuBar);
 		//root.setCenter(userLabel);
 	}
 	private void setupWelcomePage() {
-		userLabel.setText("Welcome! Please login to submit your ideas.");
+		userLabel = new Label();
+		userLabel.setText("Welcome to the Idea Submission app!\nPlease login to submit your ideas.");
 		root.setCenter(userLabel);
 			
 	}

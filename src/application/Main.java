@@ -16,7 +16,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		//To Do: create MainController class in controller package.
 		MainController controller = new MainController(primaryStage);
-		Scene scene = new Scene(controller.getView(), 800, 600);
+		Scene scene = new Scene(controller.getView(), 1000, 800);
 		
 		primaryStage.setTitle("Idea Submission App");
 		primaryStage.setScene(scene);
