@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -56,6 +57,26 @@ public class IdeaController {
 		submitButton.setOnAction(e -> submitIdea());
 
 		ideaTable = new TableView<>();
+		ideaTable.setRowFactory(tv -> new TableRow<Idea>() {
+			@Override
+			protected void updateItem(Idea item, boolean empty) {
+				super.updateItem(item, empty);
+				if(item == null || empty) {
+					setStyle("");
+				} else {
+					switch (item.getStatus()) {
+					case "Pending":
+						setStyle("-fx-background-color: #fff8dc");
+						break;
+					case "Processed":
+						setStyle("-fx-background-color: #f0f0f0");
+						break;
+					default:
+						setStyle("");
+					}
+				}
+			}
+		});
 		setupTable();
 		ideaLayout.getChildren().addAll(new Label("Short Description"), shortDescriptionField, new Label("Full Idea"), ideaArea, submitButton);
 		viewLayout.getChildren().addAll(refreshButton, lastRefreshedLabel, new Label("Your Ideas"), ideaTable);
