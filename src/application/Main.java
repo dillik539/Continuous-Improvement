@@ -16,7 +16,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		MainController controller = new MainController(primaryStage);
 		Scene scene = new Scene(controller.getView(), 1000, 800);
-		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		//Load the global style sheet
+		scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 		
 		primaryStage.setTitle("Idea Submission App");
 		primaryStage.setScene(scene);
