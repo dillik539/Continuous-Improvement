@@ -13,6 +13,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,6 +24,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.Database;
@@ -42,21 +46,40 @@ public class IdeaController {
 
 	public IdeaController(String username) {
 		this.username = username;
-		mainLayout = new HBox(10);
-		ideaLayout = new VBox(10);
-		viewLayout = new VBox(10);
+		
+		mainLayout = new HBox(20); //space between form (left panel) and table (right panel)
+		mainLayout.setPadding(new Insets(10)); //optional padding around the whole layout
+		
+		ideaLayout = new VBox(10); //left side (form)
+		viewLayout = new VBox(10); //right side (table and refresh button)
 
 		shortDescriptionField = new TextField();
 		ideaArea = new TextArea();
+		//Let textArea expand vertically
+		VBox.setVgrow(ideaArea, Priority.ALWAYS);
 		
-		lastRefreshedLabel = new Label();
 		refreshButton = new Button("Refresh Now");
 		refreshButton.setOnAction(e -> loadIdeas());
+		
+		lastRefreshedLabel = new Label("Last Refreshed at : --");
+		
+		HBox refreshBox = new HBox(10);
+		refreshBox.setAlignment(Pos.CENTER_LEFT);
+		
+		refreshBox.getChildren().addAll(refreshButton, lastRefreshedLabel);
+		HBox.setHgrow(lastRefreshedLabel, Priority.ALWAYS);
+		lastRefreshedLabel.setMaxWidth(Double.MAX_VALUE);
+		lastRefreshedLabel.setAlignment(Pos.CENTER_RIGHT);
+		
+		
 
 		Button submitButton = new Button("Submit");
 		submitButton.setOnAction(e -> submitIdea());
 
 		ideaTable = new TableView<>();
+		//stretch the table
+		VBox.setVgrow(ideaTable, Priority.ALWAYS);
+		
 		ideaTable.setRowFactory(tv -> new TableRow<Idea>() {
 			@Override
 			protected void updateItem(Idea item, boolean empty) {
@@ -78,11 +101,25 @@ public class IdeaController {
 			}
 		});
 		setupTable();
-		ideaLayout.getChildren().addAll(new Label("Short Description"), shortDescriptionField, new Label("Full Idea"), ideaArea, submitButton);
-		viewLayout.getChildren().addAll(refreshButton, lastRefreshedLabel, new Label("Your Ideas"), ideaTable);
+		
+		
+		//Left side form
+		ideaLayout.getChildren().addAll(
+				new Label("Short Description"),
+				shortDescriptionField,
+				new Label("Full Idea"),
+				ideaArea,
+				submitButton);
+		
+		
+		//Add table and associated controls to the right(view) layout
+		viewLayout.getChildren().addAll(refreshBox, new Label("Your Ideas"), ideaTable);
+		
+		//stretch right panel
+		HBox.setHgrow(viewLayout, Priority.ALWAYS);
+		
+		//combine into main layout
 		mainLayout.getChildren().addAll(ideaLayout, viewLayout);
-//		layout.getChildren().addAll(new Label("Short Description"), shortDescriptionField, new Label("Your Idea"),
-//				ideaArea, submitButton,refreshButton, lastRefreshedLabel, new Label("Your Ideas"), ideaTable);
 		
 		loadIdeas();//Load ideas initailly from the database
 		startAutoRefresh(); //refresh loaded data periodically to reflect all ideas added including the recentones from the database
