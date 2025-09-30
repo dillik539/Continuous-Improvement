@@ -51,8 +51,18 @@ public class IdeaController {
 		mainLayout.setPadding(new Insets(10)); //optional padding around the whole layout
 		
 		ideaLayout = new VBox(10); //left side (form)
+		ideaLayout.setMinWidth(350); //minimum width before shrinking
+		ideaLayout.setPrefWidth(400); //preferred width (default space it tries to take)
+		ideaLayout.setMaxWidth(500); //maximum width
+		HBox.setHgrow(ideaLayout, Priority.ALWAYS);
+		VBox.setVgrow(ideaLayout, Priority.ALWAYS);
+		
 		viewLayout = new VBox(10); //right side (table and refresh button)
-
+		HBox.setHgrow(viewLayout, Priority.ALWAYS); //stretch right panel
+		viewLayout.setMinWidth(400); //minimum width before shrinking
+		viewLayout.setPrefWidth(500);
+		viewLayout.setMaxWidth(Double.MAX_VALUE);
+		
 		shortDescriptionField = new TextField();
 		ideaArea = new TextArea();
 		//Let textArea expand vertically
@@ -62,16 +72,14 @@ public class IdeaController {
 		refreshButton.setOnAction(e -> loadIdeas());
 		
 		lastRefreshedLabel = new Label("Last Refreshed at : --");
+		HBox.setHgrow(lastRefreshedLabel, Priority.ALWAYS);
+		lastRefreshedLabel.setMaxWidth(Double.MAX_VALUE);
+		lastRefreshedLabel.setAlignment(Pos.CENTER_RIGHT);
 		
 		HBox refreshBox = new HBox(10);
 		refreshBox.setAlignment(Pos.CENTER_LEFT);
 		
 		refreshBox.getChildren().addAll(refreshButton, lastRefreshedLabel);
-		HBox.setHgrow(lastRefreshedLabel, Priority.ALWAYS);
-		lastRefreshedLabel.setMaxWidth(Double.MAX_VALUE);
-		lastRefreshedLabel.setAlignment(Pos.CENTER_RIGHT);
-		
-		
 
 		Button submitButton = new Button("Submit");
 		submitButton.setOnAction(e -> submitIdea());
@@ -115,8 +123,6 @@ public class IdeaController {
 		//Add table and associated controls to the right(view) layout
 		viewLayout.getChildren().addAll(refreshBox, new Label("Your Ideas"), ideaTable);
 		
-		//stretch right panel
-		HBox.setHgrow(viewLayout, Priority.ALWAYS);
 		
 		//combine into main layout
 		mainLayout.getChildren().addAll(ideaLayout, viewLayout);
