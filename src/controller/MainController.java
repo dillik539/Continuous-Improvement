@@ -41,21 +41,21 @@ public class MainController {
 	
 	private void setupMenuBar() {
 	    menuBar = new MenuBar();
-	    menuBar.setStyle("-fx-background-color: #ADD8E6;"); // Optional if you want to color MenuBar too
+	    //menuBar.setStyle("-fx-background-color: #ADD8E6;"); // Optional if you want to color MenuBar too
 
 	    HBox menuBox = new HBox(10);
 	    menuBox.setPadding(new Insets(5));
 	    menuBox.setAlignment(Pos.CENTER_LEFT);
-	    menuBox.setStyle("-fx-background-color: #ADD8E6;"); // Color the bar
+	   // menuBox.setStyle("-fx-background-color: #ADD8E6;"); // Color the bar
 	       
 	    loginButton = new Button("Login");
 	    logoutButton = new Button("Logout");
 	    logoutButton.setDisable(true);
 
 	    // Optional button styling
-	    String buttonStyle = "-fx-background-color: white; -fx-text-fill: #005f87; -fx-font-weight: bold;";
-	    loginButton.setStyle(buttonStyle);
-	    logoutButton.setStyle(buttonStyle);
+	    //String buttonStyle = "-fx-background-color: white; -fx-text-fill: #005f87; -fx-font-weight: bold;";
+	    //loginButton.setStyle(buttonStyle);
+	    //logoutButton.setStyle(buttonStyle);
 
 	    loginButton.setOnAction(e -> openLoginWindow());
 	    logoutButton.setOnAction(e -> handleLogout());
@@ -64,8 +64,15 @@ public class MainController {
 	    HBox.setHgrow(spacer, Priority.ALWAYS);
 
 	    userLabel = new Label();
-	    userLabel.setStyle("-fx-text-fill: #003f5c; -fx-font-size: 14px; -fx-font-weight: bold;");
+	    //userLabel.setStyle("-fx-text-fill: #003f5c; -fx-font-size: 14px; -fx-font-weight: bold;");
 
+	    //add style class here
+	    menuBar.getStyleClass().add("menu-bar");
+	    menuBox.getStyleClass().add("menu--box");
+	    loginButton.getStyleClass().add("menu-button");
+	    logoutButton.getStyleClass().add("menu-button");
+	    userLabel.getStyleClass().add("user-label");
+	    
 	    menuBox.getChildren().addAll(loginButton, logoutButton, spacer, userLabel);
 
 	    VBox topBox = new VBox(menuBar, menuBox);

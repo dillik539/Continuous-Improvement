@@ -89,24 +89,23 @@ public class IdeaController {
 		VBox.setVgrow(ideaTable, Priority.ALWAYS);
 		
 		ideaTable.setRowFactory(tv -> new TableRow<Idea>() {
-			@Override
-			protected void updateItem(Idea item, boolean empty) {
-				super.updateItem(item, empty);
-				if(item == null || empty) {
-					setStyle("");
-				} else {
-					switch (item.getStatus()) {
-					case "Pending":
-						setStyle("-fx-background-color: #fff8dc");
-						break;
-					case "Processed":
-						setStyle("-fx-background-color: #f0f0f0");
-						break;
-					default:
-						setStyle("");
-					}
-				}
-			}
+		    @Override
+		    protected void updateItem(Idea item, boolean empty) {
+		        super.updateItem(item, empty);
+		        
+		        // Clear old style classes each update
+		        getStyleClass().removeAll("row-pending", "row-processed");
+		        if (item != null && !empty) {
+		            switch (item.getStatus()) {
+		                case "Pending":
+		                    getStyleClass().add("row-pending");
+		                    break;
+		                case "Processed":
+		                    getStyleClass().add("row-processed");
+		                    break;
+		            }
+		        }
+		    }
 		});
 		setupTable();
 		

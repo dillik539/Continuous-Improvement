@@ -1,1 +1,66 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+/*-- General Root --- */
+.root {
+	-fx-font-family: "Segoe UI", Arial, sans-serif;
+	-fx-font-size: 13px;
+}
+
+/* Left Panel (Idea form) */
+.form-panel {
+	-fx-background-color: #f9f9f9;
+	-fx-border-color: #d0d0d0;
+	-fx-border-width: 1;
+	-fx-padding: 10;
+	-fx-spacing: 10;
+}
+
+/* Right Panel (Table) */
+.table-panel {
+	-fx-background-color: #ffffff;
+	-fx-border-color: #d0d0d0;
+	-fx-border-width: 1;
+	-fx-padding: 10;
+	-fx-spacing: 10;
+}
+
+/* Main Controller */
+.menu-bar {
+	-fx-background-color: #ADD8E6; /*Light blue */
+	-fx-padding: 5;
+}
+
+/* Style the container HBox */
+.menu-box {
+	-fx-background-color: #ADD8E6;
+	-fx-padding: 5;
+	-fx-spacing: 10;
+}
+
+/* Style Login/Logout buttons */
+.menu-button {
+	-fx-background-color: white;
+	-fx-text-fill: #005f87;
+	-fx-font-weight: bold;
+	-fx-padding: 5 10 5 10;
+	-fx-border-color: #005f87;
+	-fx-border-radius: 3;
+	-fx-background-radius: 3;
+}
+
+/* Style user Label (top right) */
+.user-label{
+	-fx-text-fill: #003f5c;
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+}
+
+/* Style pending rows */
+.row-pending {
+    -fx-background-color: #fff8dc; /* cornsilk */
+}
+
+/* Style processed rows */
+.row-processed {
+    -fx-background-color: #f0f0f0;
+}
+

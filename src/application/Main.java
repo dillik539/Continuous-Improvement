@@ -14,9 +14,9 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
-		//To Do: create MainController class in controller package.
 		MainController controller = new MainController(primaryStage);
 		Scene scene = new Scene(controller.getView(), 1000, 800);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
 		primaryStage.setTitle("Idea Submission App");
 		primaryStage.setScene(scene);
