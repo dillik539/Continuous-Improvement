@@ -68,7 +68,7 @@ public class MainController {
 
 	    //add style class here
 	    menuBar.getStyleClass().add("menu-bar");
-	    menuBox.getStyleClass().add("menu--box");
+	    menuBox.getStyleClass().add("menu-box");
 	    loginButton.getStyleClass().add("menu-button");
 	    logoutButton.getStyleClass().add("menu-button");
 	    userLabel.getStyleClass().add("user-label");
@@ -95,17 +95,6 @@ public class MainController {
 		loginController.showLoginWindow();
 	}
 
-	/*
-	public void handleLogin(String username) {
-		loginMenuItem.setDisable(true);
-		logoutMenuItem.setDisable(false);
-		//TO DO: add a label in the right of menu bar and display "Welcome, " + username message.
-		
-		//TO DO: Create IdeaController class
-		IdeaController ideaController = new IdeaController(username);
-		root.setCenter(ideaController.getView());
-	}
-	*/
 	/**
 	 * Role-based page loading after login.
 	 */
@@ -126,6 +115,7 @@ public class MainController {
 			AdminController adminController = new AdminController();
 			
 			Button addUserButton = new Button("Add New User");
+			addUserButton.getStyleClass().add("menu-button");
 			addUserButton.setOnAction(e -> new AddUserController().show());
 			
 			adminLayout.getChildren().addAll(new Label ("Idea Submission"), ideaController.getView(), new Label ("Admin Panel"), adminController.getView(), addUserButton);

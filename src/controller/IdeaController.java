@@ -49,6 +49,7 @@ public class IdeaController {
 		
 		mainLayout = new HBox(20); //space between form (left panel) and table (right panel)
 		mainLayout.setPadding(new Insets(10)); //optional padding around the whole layout
+		mainLayout.getStyleClass().add("main-layout"); //root styling
 		
 		ideaLayout = new VBox(10); //left side (form)
 		ideaLayout.setMinWidth(350); //minimum width before shrinking
@@ -56,37 +57,46 @@ public class IdeaController {
 		ideaLayout.setMaxWidth(500); //maximum width
 		HBox.setHgrow(ideaLayout, Priority.ALWAYS);
 		VBox.setVgrow(ideaLayout, Priority.ALWAYS);
+		ideaLayout.getStyleClass().add("idea-form"); //form styling
 		
 		viewLayout = new VBox(10); //right side (table and refresh button)
 		HBox.setHgrow(viewLayout, Priority.ALWAYS); //stretch right panel
 		viewLayout.setMinWidth(400); //minimum width before shrinking
 		viewLayout.setPrefWidth(500);
 		viewLayout.setMaxWidth(Double.MAX_VALUE);
+		viewLayout.getStyleClass().add("idea-table-section"); // right panel styling
 		
 		shortDescriptionField = new TextField();
+		shortDescriptionField.getStyleClass().add("short-description-field"); //text-field styling
+		
 		ideaArea = new TextArea();
 		//Let textArea expand vertically
 		VBox.setVgrow(ideaArea, Priority.ALWAYS);
+		ideaArea.getStyleClass().add("idea-textarea");
 		
 		refreshButton = new Button("Refresh Now");
 		refreshButton.setOnAction(e -> loadIdeas());
+		refreshButton.getStyleClass().add("action-button");
 		
 		lastRefreshedLabel = new Label("Last Refreshed at : --");
 		HBox.setHgrow(lastRefreshedLabel, Priority.ALWAYS);
 		lastRefreshedLabel.setMaxWidth(Double.MAX_VALUE);
 		lastRefreshedLabel.setAlignment(Pos.CENTER_RIGHT);
+		lastRefreshedLabel.getStyleClass().add("refresh-label");
 		
 		HBox refreshBox = new HBox(10);
 		refreshBox.setAlignment(Pos.CENTER_LEFT);
-		
 		refreshBox.getChildren().addAll(refreshButton, lastRefreshedLabel);
+		refreshBox.getStyleClass().add("refresh-box");
 
 		Button submitButton = new Button("Submit");
 		submitButton.setOnAction(e -> submitIdea());
+		submitButton.getStyleClass().add("submit-button");
 
 		ideaTable = new TableView<>();
 		//stretch the table
 		VBox.setVgrow(ideaTable, Priority.ALWAYS);
+		ideaTable.getStyleClass().add("idea-table");
 		
 		ideaTable.setRowFactory(tv -> new TableRow<Idea>() {
 		    @Override
