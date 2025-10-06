@@ -42,7 +42,7 @@ public class AdminController {
 
 	public AdminController() {
 		layout = new VBox(10);
-		layout.setPadding(new Insets(10));
+		layout.setPadding(new Insets(20, 20, 40, 20)); //more bottom space
 		
 		//Admin Panel Label
 		Label adminPanelLabel = new Label("Admin Panel");

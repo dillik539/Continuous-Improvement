@@ -48,7 +48,7 @@ public class IdeaController {
 		this.username = username;
 		
 		mainLayout = new HBox(20); //space between form (left panel) and table (right panel)
-		mainLayout.setPadding(new Insets(10)); //optional padding around the whole layout
+		mainLayout.setPadding(new Insets(20, 20, 40, 20)); //top, right, bottom, left (extra bottom space)
 		mainLayout.getStyleClass().add("main-layout"); //root styling
 		
 		ideaLayout = new VBox(10); //left side (form)
