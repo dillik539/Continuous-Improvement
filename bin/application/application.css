@@ -119,9 +119,24 @@
 
 /* Distinct row styling */
 .table-row-cell {
+	-fx-cell-size: 26px;
+	-fx-font-size: 14px;
+	-fx-padding: 2 2;  /* Adds vertical/horizontal space  */
     -fx-border-color: #e0e0e0;     /* Light gray border line */
     -fx-border-width: 0 0 1 0;     /* Thin line below each row */
     -fx-border-insets: 0;
+}
+
+/* Increase header height and font */
+.table-view .column-header, .table-view .filler {
+	-fx-pref-height: 26px;
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+}
+
+/* Slightly increase spacing between columns */
+.table-view .table-column {
+	-fx-padding: 0 2 0 2;
 }
 
 
@@ -148,6 +163,16 @@
     -fx-border-color: #e0e0e0;
 }
 
+
+/* ============= Hover effect for all rows =========== */
+.table-row-cell:hover {
+    -fx-background-color: #d6e9ff !important; /* soft blue highlight */
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-border-color: #0078d7; /* stronger blue border on hover */
+    -fx-border-width: 1; /* make border slightly bolder */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.3, 0, 1); /* soft shadow glow */
+}
 
 /* =================== PANEL STYLING (Admin, etc.) =================== */
 .panel-header {
