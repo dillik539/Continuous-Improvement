@@ -1,17 +1,22 @@
+
+
 /* =================== GLOBAL LAYOUT =================== */
 .main-layout {
     -fx-background-color: #f9f9f9;
 }
+
 
 /* =================== MENU BAR =================== */
 .menu-bar {
     -fx-background-color: #ADD8E6; /* Light blue */
 }
 
+
 .menu-box {
     -fx-background-color: #ADD8E6;
     -fx-padding: 5;
 }
+
 
 .menu-button {
     -fx-background-color: white;
@@ -21,17 +26,20 @@
     -fx-padding: 5 10;
 }
 
+
 .user-label {
     -fx-text-fill: #003f5c;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
+
 .welcome-label {
     -fx-font-size: 16px;
     -fx-text-fill: #333;
     -fx-padding: 20;
 }
+
 
 /* =================== IDEA FORM (LEFT PANEL) =================== */
 .idea-form {
@@ -42,6 +50,7 @@
     -fx-background-radius: 5;
 }
 
+
 .short-description-field {
     -fx-background-color: white;
     -fx-border-color: #3498db;
@@ -49,10 +58,12 @@
     -fx-background-radius: 3;
 }
 
+
 .idea-textarea {
     -fx-border-color: #3498db;
     -fx-background-color: white;
 }
+
 
 /* =================== BUTTONS =================== */
 .action-button {
@@ -63,9 +74,11 @@
     -fx-background-radius: 4;
     -fx-cursor: hand;
 }
+
 .action-button:hover {
     -fx-background-color: #005a9e;
 }
+
 
 .submit-button {
     -fx-background-color: #28a745;
@@ -74,36 +87,67 @@
     -fx-background-radius: 5;
     -fx-padding: 6 12;
 }
+
 .submit-button:hover {
     -fx-background-color: #1e7e34;
 }
+
 
 /* =================== REFRESH SECTION =================== */
 .refresh-box {
     -fx-padding: 5;
 }
+
 .refresh-label {
     -fx-text-fill: #555555;
     -fx-font-size: 11px;
     -fx-font-style: italic;
 }
 
+
 /* =================== TABLE SECTION =================== */
 .idea-table-section {
-    -fx-padding: 10;
+    -fx-padding: 10 10 20 10; /* Added bottom padding */
 }
+
 
 .idea-table {
     -fx-border-color: #ccc;
     -fx-border-width: 1;
 }
 
+
+/* Distinct row styling */
+.table-row-cell {
+    -fx-border-color: #e0e0e0;     /* Light gray border line */
+    -fx-border-width: 0 0 1 0;     /* Thin line below each row */
+    -fx-border-insets: 0;
+}
+
+
+/* Alternating row colors for better distinction */
+.table-row-cell:odd {
+    -fx-background-color: #ffffff; /* white rows */
+}
+
+
+.table-row-cell:even {
+    -fx-background-color: #f9f9f9; /* very light gray */
+}
+
+
+/* Preserve custom status colors */
 .table-row-cell.row-pending {
     -fx-background-color: #fff8dc; /* light yellow */
+    -fx-border-color: #e0e0e0;
 }
+
+
 .table-row-cell.row-processed {
     -fx-background-color: #f0f0f0; /* light gray */
+    -fx-border-color: #e0e0e0;
 }
+
 
 /* =================== PANEL STYLING (Admin, etc.) =================== */
 .panel-header {
@@ -113,12 +157,14 @@
     -fx-border-width: 0 0 1 0;
 }
 
+
 .panel-title {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
     -fx-alignment: center;
 }
+
 
 /* =================== INPUT FIELDS =================== */
 .text-field, .text-area {
@@ -128,15 +174,22 @@
     -fx-faint-focus-color: transparent;
 }
 
+
 /* =================== DEFAULT BUTTONS =================== */
 .button {
     -fx-background-radius: 4;
 }
+
+
 .button:default {
     -fx-background-color: #28a745;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
+
+
 .button:default:hover {
     -fx-background-color: #1e7e34;
 }
+
+
