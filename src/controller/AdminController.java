@@ -13,6 +13,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -20,6 +22,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -37,39 +42,65 @@ public class AdminController {
 
 	public AdminController() {
 		layout = new VBox(10);
+		layout.setPadding(new Insets(10));
+		
+		//Admin Panel Label
+		Label adminPanelLabel = new Label("Admin Panel");
+		adminPanelLabel.getStyleClass().add("panel-title");
+		adminPanelLabel.setMaxWidth(Double.MAX_VALUE);
+		adminPanelLabel.setAlignment(Pos.CENTER);
+		
+		//---- Buttons -----
+		Button processButton = new Button("Process Idea");
+		processButton.getStyleClass().add("action-button");
+		processButton.setOnAction(e -> processIdea());
+		
+		Button addUserButton = new Button("Add New User");
+		addUserButton.getStyleClass().add("action-button");
+		addUserButton.setOnAction(e -> new AddUserController().show());
+		
+		refreshButton = new Button("Refresh Now");
+		refreshButton.getStyleClass().add("action-button");
+		refreshButton.setOnAction(e -> loadIdeas());
+		
+		lastRefreshedLabel = new Label("Last refreshed at: --");
+		lastRefreshedLabel.getStyleClass().add("refresh-label");
+		
+		// --- Buttons and labels align horizontally ----
+		Region spacer = new Region(); //This pushes lastRefreshedLabel to the right corner
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+		HBox topControls = new HBox(15, processButton, addUserButton, refreshButton, spacer, lastRefreshedLabel);
+		topControls.setAlignment(Pos.CENTER_LEFT);
+
+		//lastRefreshedLabel.setAlignment(Pos.CENTER_RIGHT);
+		
+		//----- Admin Header ----
+		VBox adminHeader = new VBox(10, adminPanelLabel, topControls);
+		adminHeader.getStyleClass().add("panel-header");
 
 		ideaTable = new TableView<>();
 		ideaTable.setRowFactory(tv -> new TableRow<Idea>() {
 			@Override
 			protected void updateItem(Idea item, boolean empty) {
 				super.updateItem(item, empty);
-				if(item == null || empty) {
-					setStyle("");
-				} else {
+				getStyleClass().removeAll("row-pending", "row-processed");
+				if(item != null && !empty) {
 					switch (item.getStatus()) {
 					case "Pending":
-						setStyle("-fx-background-color: #fff8dc");
+						getStyleClass().add("row-pending");
 						break;
 					case "Processed":
-						setStyle("-fx-background-color: #f0f0f0");
+						getStyleClass().add("row-processed");
 						break;
-					default:
-						setStyle("");
 					}
 				}
 			}
 		});
 		setupTable();
 		
-		refreshButton = new Button("Refresh Now");
-		refreshButton.setOnAction(e -> loadIdeas());
+		VBox.setVgrow(ideaTable, Priority.ALWAYS);
 		
-		lastRefreshedLabel = new Label();
-
-		Button processButton = new Button("Process Idea");
-		processButton.setOnAction(e -> processIdea());
-		
-		layout.getChildren().addAll(refreshButton, lastRefreshedLabel, ideaTable, processButton);
+		layout.getChildren().addAll(adminHeader, ideaTable);
 
 		loadIdeas();//load ideas from the database initially
 		startAutoRefresh(); //auto refresh periodically.

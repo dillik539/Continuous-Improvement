@@ -1,9 +1,9 @@
-/* ===== Main Layout ===== */
+/* =================== GLOBAL LAYOUT =================== */
 .main-layout {
     -fx-background-color: #f9f9f9;
 }
 
-/* ===== Menu Bar Section ===== */
+/* =================== MENU BAR =================== */
 .menu-bar {
     -fx-background-color: #ADD8E6; /* Light blue */
 }
@@ -33,7 +33,7 @@
     -fx-padding: 20;
 }
 
-/* ===== Idea Form (Left Panel) ===== */
+/* =================== IDEA FORM (LEFT PANEL) =================== */
 .idea-form {
     -fx-padding: 10;
     -fx-background-color: #eef6ff;
@@ -54,35 +54,41 @@
     -fx-background-color: white;
 }
 
-/* ===== Buttons ===== */
+/* =================== BUTTONS =================== */
 .action-button {
-    -fx-background-color: #3498db;
+    -fx-background-color: #0078d7;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-background-radius: 5;
-    -fx-padding: 6 12;
+    -fx-padding: 6 14;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.action-button:hover {
+    -fx-background-color: #005a9e;
 }
 
 .submit-button {
-    -fx-background-color: #2ecc71;
+    -fx-background-color: #28a745;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 5;
     -fx-padding: 6 12;
 }
-
-/* ===== Refresh Section ===== */
-.refresh-label {
-    -fx-text-fill: #333;
-    -fx-font-size: 12px;
-    -fx-font-style: italic;
+.submit-button:hover {
+    -fx-background-color: #1e7e34;
 }
 
+/* =================== REFRESH SECTION =================== */
 .refresh-box {
     -fx-padding: 5;
 }
+.refresh-label {
+    -fx-text-fill: #555555;
+    -fx-font-size: 11px;
+    -fx-font-style: italic;
+}
 
-/* ===== Table Section ===== */
+/* =================== TABLE SECTION =================== */
 .idea-table-section {
     -fx-padding: 10;
 }
@@ -92,11 +98,45 @@
     -fx-border-width: 1;
 }
 
-/* Row-specific styles */
-.row-pending {
+.table-row-cell.row-pending {
     -fx-background-color: #fff8dc; /* light yellow */
 }
-
-.row-processed {
+.table-row-cell.row-processed {
     -fx-background-color: #f0f0f0; /* light gray */
+}
+
+/* =================== PANEL STYLING (Admin, etc.) =================== */
+.panel-header {
+    -fx-background-color: #e9f2fa; /* light blue like top panels */
+    -fx-padding: 10;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 0 0 1 0;
+}
+
+.panel-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-alignment: center;
+}
+
+/* =================== INPUT FIELDS =================== */
+.text-field, .text-area {
+    -fx-border-color: #99c2e6;
+    -fx-border-radius: 3;
+    -fx-focus-color: #0078d7;
+    -fx-faint-focus-color: transparent;
+}
+
+/* =================== DEFAULT BUTTONS =================== */
+.button {
+    -fx-background-radius: 4;
+}
+.button:default {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.button:default:hover {
+    -fx-background-color: #1e7e34;
 }

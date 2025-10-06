@@ -111,14 +111,21 @@ public class MainController {
 		case "admin":
 			VBox adminLayout = new VBox(10);
 			
+			//---- Style Idea Submission header ----//
+			Label ideaSubmissionLabel = new Label("Idea Submission");
+			ideaSubmissionLabel.getStyleClass().add("panel-title");
+			ideaSubmissionLabel.setMaxWidth(Double.MAX_VALUE);
+			ideaSubmissionLabel.setAlignment(Pos.CENTER);
+			
+			// --- Wrap header in a styled container ----//
+			VBox ideaHeader = new VBox(ideaSubmissionLabel);
+			ideaHeader.getStyleClass().add("panel-header");
+			
 			IdeaController ideaController = new IdeaController(username);
 			AdminController adminController = new AdminController();
 			
-			Button addUserButton = new Button("Add New User");
-			addUserButton.getStyleClass().add("menu-button");
-			addUserButton.setOnAction(e -> new AddUserController().show());
 			
-			adminLayout.getChildren().addAll(new Label ("Idea Submission"), ideaController.getView(), new Label ("Admin Panel"), adminController.getView(), addUserButton);
+			adminLayout.getChildren().addAll(ideaHeader, ideaController.getView(), adminController.getView());
 			root.setCenter(adminLayout);
 			break;
 			
