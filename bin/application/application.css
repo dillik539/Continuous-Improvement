@@ -256,3 +256,53 @@
     -fx-text-fill: #004b8d;
     -fx-font-weight: bold;
 }
+
+/* ===== ADD USER WINDOW ===== */
+.add-user-window {
+    -fx-background-color: #eaf4ff;
+    -fx-border-color: #a0c4ff;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0.2, 0, 1);
+}
+
+.label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #004b8d;
+    -fx-font-weight: bold;
+}
+
+.text-field, .password-field, .combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #0078d7;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 8;
+    -fx-pref-height: 30px;
+    -fx-font-size: 13px;
+}
+
+.combo-box {
+    -fx-min-width: 200;
+}
+
+.button {
+    -fx-background-color: #0078d7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-font-size: 13px;
+}
+.button:hover {
+    -fx-background-color: #005fa3;
+}
+
+.status-label {
+    -fx-font-size: 12px;
+    -fx-padding: 5;
+    -fx-font-weight: bold;
+    -fx-text-fill: red;
+    -fx-font-style:italic;
+}

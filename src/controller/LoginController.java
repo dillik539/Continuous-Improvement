@@ -15,6 +15,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -40,8 +42,17 @@ public class LoginController {
 		loginStage.initModality(Modality.APPLICATION_MODAL);
 		loginStage.setTitle("User Login");
 		
+		//for consistent label width
+		double labelWidth = 90;
 		
-		//---- Input Fields ---
+		//labels
+		Label usernameLabel = new Label("Username");
+		usernameLabel.setPrefWidth(labelWidth);
+		Label passwordLabel = new Label("Password");
+		passwordLabel.setPrefWidth(labelWidth);
+		
+		
+		//Input Fields
 		usernameField = new TextField();
 		usernameField.setPromptText("Username");
 		usernameField.getStyleClass().add("login-field");
@@ -50,12 +61,21 @@ public class LoginController {
 		passwordField.setPromptText("Password");
 		passwordField.getStyleClass().add("login-field");
 		
-		//---- Status Label ---
+		HBox usernameBox = new HBox(10, usernameLabel, usernameField);
+		HBox passwordBox = new HBox(10, passwordLabel, passwordField);
+		usernameBox.setAlignment(Pos.CENTER_LEFT);
+		passwordBox.setAlignment(Pos.CENTER_LEFT);
+		
+		HBox.setHgrow(usernameField, Priority.ALWAYS);
+		HBox.setHgrow(passwordField, Priority.ALWAYS);
+		
+		// Status Label
 		statusLabel = new Label();
-		statusLabel.getStyleClass().add("login-status");
+		statusLabel.getStyleClass().add("status-label");
+		//VBox.setMargin(statusLabel, new Insets(0,0,5,0)); //less space below label
 		
 		
-		//---- Buttons ----
+		//Buttons 
 		Button loginButton = new Button("Login");
 		loginButton.getStyleClass().add("login-button");
 		
@@ -66,9 +86,9 @@ public class LoginController {
 		helpButton.getStyleClass().add("login-button");
 		
 		//Sets consistent width for all buttons
-		loginButton.setPrefWidth(100);
-		cancelButton.setPrefWidth(100);
-		helpButton.setPrefWidth(100);
+		loginButton.setPrefWidth(85);
+		cancelButton.setPrefWidth(85);
+		helpButton.setPrefWidth(85);
 		
 	
 		loginButton.setOnAction(e -> {
@@ -83,19 +103,23 @@ public class LoginController {
 		});
 		
 		cancelButton.setOnAction(e ->loginStage.close());
-		helpButton.setOnAction(e -> statusLabel.setText("Contact admin for credentials."));
+		helpButton.setOnAction(e -> statusLabel.setText("Enter Username and Password to login."));
 		
-		HBox buttonBox = new HBox(10, loginButton, cancelButton, helpButton);
-		buttonBox.setAlignment(Pos.CENTER);
+		Region leftSpacer = new Region();
+		leftSpacer.setPrefWidth(labelWidth);
+		
+		HBox buttonBox = new HBox(15, leftSpacer, loginButton, cancelButton, helpButton);
+		buttonBox.setAlignment(Pos.CENTER_LEFT);
+		buttonBox.setPadding(new Insets(20,0,50,0));
 		
 		//---- Layout ----
-		VBox layout = new VBox(15, usernameField, passwordField, buttonBox, statusLabel);
+		VBox layout = new VBox(14, statusLabel, usernameBox, passwordBox, buttonBox);
 		layout.setAlignment(Pos.CENTER);
-		layout.setPadding(new Insets(20));
+		layout.setPadding(new Insets(20, 20, 15, 20));
 		layout.getStyleClass().add("login-window");
 		
 		
-		Scene scene = new Scene(layout, 350, 250);
+		Scene scene = new Scene(layout, 400, 250);
 		scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 		
 		loginStage.setScene(scene);
