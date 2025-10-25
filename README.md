@@ -8,20 +8,21 @@ This README provides guidance for both **developers** and **end-users** of the C
 
 1. [Overview](#overview)
 2. [For Developers](#for-developers)
-   - [Project Structure](#project-structure)
-   - [Setup & Installation](#setup-installation)
-   - [Running the Application](#running-the-application)
-   - [Features](#features)
-   - [Admin Features](#admin-features)
-   - [Styling (CSS)](#styling-css)
-   - [Architecture](#architecture)
-   - [Extending or Modifying](#extending-or-modifying)
+    1. [Project Structure](#project-structure)
+    2. [Setup & Installation](#setup-installation)
+    3. [Running the Application](#running-the-application)
+    4. [Features](#features)
+    5. [Admin Features](#admin-features)
+    6. [Styling (CSS)](#styling-css)
+    7. [Architecture](#architecture)
+    8. [Extending or Modifying](#extending-or-modifying)
 3. [For Users](#for-users)
-   - [Getting Started](#getting-started)
-   - [Submitting an Idea](#submitting-an-idea)
-   - [Admin Panel Overview](#admin-panel-overview)
-4. [Future Improvements](#future-improvements)
-5. [License](#license)
+     1. [Getting Started](#getting-started)
+     2. [Submitting an Idea](#submitting-an-idea)
+     3. [Admin Panel Overview](#admin-panel-overview)
+4. [Application Preview](#application-preview)
+5. [Future Improvements](#future-improvements)
+6. [License](#license)
 
 ---
 
@@ -158,6 +159,33 @@ Admin can:
 * Add new users
 * Refresh data manually or rely on auto-refresh
 * View all ideas in a centralized table
+
+## Application Preview
+
+Here is how the application looks like in action:
+
+**Welcome Window**
+<p align="center" style="margin-top:0; margin-bottom:0;">
+  <img src="screenshots/welcome_window.png" width="700">
+</p>
+**Login Window**
+<p align="center" style="margin-top:0;margin-bottom:0;">
+  <img src="screenshots/login_window.png" width="700">
+</p>
+**Idea Submission (User View)**
+<p align="center" style="margin-top:0;margin-bottom:0;">
+  <img src="screenshots/idea_submission_user_view.png" width="500">
+</p>
+
+**Admin Panel/Idea Submission**
+<p align="center" style="margin-top:2;margin-bottom:2;">
+  <img src="screenshots/admin_panel.png" width="700">
+</p>
+
+**Add New User Window**
+<p align="center" style="margin-top:2;margin-bottom:2;">
+  <img src="screenshots/add_new_user.png" width="700">
+</p>
 
 ## Future Improvements
 ```plaintext
