@@ -168,10 +168,12 @@ Here is how the application looks like in action:
 <p align="center" style="margin-top:0; margin-bottom:0;">
   <img src="screenshots/welcome_window.png" width="700">
 </p>
+
 **Login Window**
 <p align="center" style="margin-top:0;margin-bottom:0;">
   <img src="screenshots/login_window.png" width="700">
 </p>
+
 **Idea Submission (User View)**
 <p align="center" style="margin-top:0;margin-bottom:0;">
   <img src="screenshots/idea_submission_user_view.png" width="500">
