@@ -166,27 +166,27 @@ Here is how the application looks like in action:
 
 **Welcome Window**
 <p align="center" style="margin-top:0; margin-bottom:0;">
-  <img src="screenshots/welcome_window.png" width="700">
+  <img src="Screenshots/welcome_window.png" width="700">
 </p>
 
 **Login Window**
 <p align="center" style="margin-top:0;margin-bottom:0;">
-  <img src="screenshots/login_window.png" width="700">
+  <img src="Screenshots/login_window.png" width="700">
 </p>
 
 **Idea Submission (User View)**
 <p align="center" style="margin-top:0;margin-bottom:0;">
-  <img src="screenshots/idea_submission_user_view.png" width="500">
+  <img src="Screenshots/idea_submission_user_view.png" width="500">
 </p>
 
 **Admin Panel/Idea Submission**
 <p align="center" style="margin-top:2;margin-bottom:2;">
-  <img src="screenshots/admin_panel.png" width="700">
+  <img src="Screenshots/admin_panel.png" width="700">
 </p>
 
 **Add New User Window**
 <p align="center" style="margin-top:2;margin-bottom:2;">
-  <img src="screenshots/add_new_user.png" width="700">
+  <img src="Screenshots/add_new_user.png" width="700">
 </p>
 
 ## Future Improvements
