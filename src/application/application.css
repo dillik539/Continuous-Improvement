@@ -306,3 +306,15 @@
     -fx-text-fill: red;
     -fx-font-style:italic;
 }
+
+/* =================== TOAST MESSAGES =================== */
+.toast-pane {
+    -fx-background-color: rgba(0, 123, 255, 0.85);
+    -fx-background-radius: 8;
+    -fx-padding: 10 20;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.5, 2, 2);
+}
+

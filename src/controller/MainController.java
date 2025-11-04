@@ -27,9 +27,11 @@ public class MainController {
 	private MenuBar menuBar;
 	private Button loginButton;
 	private Button logoutButton;
+	private Button peerRecognitionButton;
 	private Label userLabel;
 	private String username;
 	private String role;
+
 	
 	
 	public MainController(Stage primaryStage) {
@@ -41,30 +43,33 @@ public class MainController {
 	
 	private void setupMenuBar() {
 	    menuBar = new MenuBar();
-	    //menuBar.setStyle("-fx-background-color: #ADD8E6;"); // Optional if you want to color MenuBar too
+	    
 
 	    HBox menuBox = new HBox(10);
 	    menuBox.setPadding(new Insets(5));
 	    menuBox.setAlignment(Pos.CENTER_LEFT);
-	   // menuBox.setStyle("-fx-background-color: #ADD8E6;"); // Color the bar
+	   
 	       
 	    loginButton = new Button("Login");
 	    logoutButton = new Button("Logout");
+	    peerRecognitionButton = new Button("Peer Recognition");
+	    
 	    logoutButton.setDisable(true);
+	    peerRecognitionButton.setVisible(false);
 
-	    // Optional button styling
-	    //String buttonStyle = "-fx-background-color: white; -fx-text-fill: #005f87; -fx-font-weight: bold;";
-	    //loginButton.setStyle(buttonStyle);
-	    //logoutButton.setStyle(buttonStyle);
-
+	    //Events handlers
 	    loginButton.setOnAction(e -> openLoginWindow());
 	    logoutButton.setOnAction(e -> handleLogout());
+	    peerRecognitionButton.setOnAction(e -> {
+	    	PeerRecognitionController recognitionController = new PeerRecognitionController();
+	    	recognitionController.show();
+	    });
 
 	    Region spacer = new Region();
 	    HBox.setHgrow(spacer, Priority.ALWAYS);
 
 	    userLabel = new Label();
-	    //userLabel.setStyle("-fx-text-fill: #003f5c; -fx-font-size: 14px; -fx-font-weight: bold;");
+	   
 
 	    //add style class here
 	    menuBar.getStyleClass().add("menu-bar");
@@ -73,7 +78,7 @@ public class MainController {
 	    logoutButton.getStyleClass().add("menu-button");
 	    userLabel.getStyleClass().add("user-label");
 	    
-	    menuBox.getChildren().addAll(loginButton, logoutButton, spacer, userLabel);
+	    menuBox.getChildren().addAll(loginButton, logoutButton, peerRecognitionButton, spacer, userLabel);
 
 	    VBox topBox = new VBox(menuBar, menuBox);
 	    root.setTop(topBox);
@@ -90,7 +95,6 @@ public class MainController {
 			
 	}
 	private void openLoginWindow() {
-		//TO DO: Create LoginController class
 		LoginController loginController = new LoginController(this);
 		loginController.showLoginWindow();
 	}
@@ -101,23 +105,25 @@ public class MainController {
 	public void handleLogin(User user) {
 		loginButton.setDisable(true);
 		logoutButton.setDisable(false);
+		peerRecognitionButton.setVisible(true);
 		
 		username = user.getUsername();
 		role = user.getRole().toLowerCase();
 		
 		userLabel.setText("Welcome, " + username + " (" + role + ")");
 		
+		
 		switch (role) {
 		case "admin":
 			VBox adminLayout = new VBox(10);
 			
-			//---- Style Idea Submission header ----//
+			//Styles Idea Submission header
 			Label ideaSubmissionLabel = new Label("Idea Submission");
 			ideaSubmissionLabel.getStyleClass().add("panel-title");
 			ideaSubmissionLabel.setMaxWidth(Double.MAX_VALUE);
 			ideaSubmissionLabel.setAlignment(Pos.CENTER);
 			
-			// --- Wrap header in a styled container ----//
+			//Wraps header in a styled container
 			VBox ideaHeader = new VBox(ideaSubmissionLabel);
 			ideaHeader.getStyleClass().add("panel-header");
 			
@@ -141,6 +147,7 @@ public class MainController {
 	private void handleLogout() {
 		loginButton.setDisable(false);
 		logoutButton.setDisable(true);
+		peerRecognitionButton.setVisible(false);
 		setupWelcomePage();
 	}
 	
