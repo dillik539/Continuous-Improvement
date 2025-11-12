@@ -16,9 +16,13 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -95,45 +99,97 @@ public class PeerRecognitionController {
 		
 		recognitionText = new TextArea();
 		recognitionText.setPromptText("Describe the Contribution...");
-		recognitionText.setPrefHeight(120);
+		recognitionText.setPrefSize(520, 200);
 		recognitionText.setWrapText(true);
+		recognitionText.getStyleClass().add("ruled-text-area");
+//		//Simulate ruled-paper background
+//		recognitionText.setStyle(
+//				 "-fx-control-inner-background: #ffffff;" +
+//						    "-fx-font-family: 'Segoe UI';" +
+//						    "-fx-font-size: 13px;" +
+//						    "-fx-border-color: #a0c4ff;" +
+//						    "-fx-border-radius: 4;"
+//			);
 		
-		VBox bottomSection = new VBox(6, recognitionLabel, recognitionText);
+		//Adds watermark star inside the text area
+		ImageView starWatermark = new ImageView(
+				new Image(getClass().getResource("/application/star.png").toExternalForm())
+				);
+		starWatermark.setOpacity(0.25);
+		starWatermark.setPreserveRatio(true);
+		starWatermark.setFitWidth(250);
+		starWatermark.setMouseTransparent(true); //so it doesn't block typing
+		//starWatermark.setRotate(-8);
+		//starWatermark.setTranslateY(-20); //Shift upward slightly
+		
+		StackPane textAreaWithWatermark = new StackPane();
+		textAreaWithWatermark.getChildren().addAll(recognitionText, starWatermark);
+		textAreaWithWatermark.setPadding(new Insets(5));
+		StackPane.setAlignment(starWatermark, Pos.CENTER);
+		StackPane.setAlignment(recognitionText, Pos.TOP_LEFT);
+		VBox.setVgrow(textAreaWithWatermark, Priority.ALWAYS);
+		
+		//Keeps watermark centered when user scrolls
+		recognitionText.scrollTopProperty().addListener((obs,oldVal, newVal) -> {
+			starWatermark.setTranslateY(-newVal.doubleValue() /2 - 20);//adjusts slightly with scrolling
+		});
+		
+		VBox bottomSection = new VBox(6, recognitionLabel, textAreaWithWatermark);
 		bottomSection.setPadding(new Insets(10,0,0,0));
 
 		
 		//Buttons
         Button submitButton = new Button("Submit");
         Button cancelButton = new Button("Cancel");
-        submitButton.setPrefWidth(120);
-        cancelButton.setPrefWidth(120);
+        Button helpButton = new Button("Help");
+        submitButton.setPrefWidth(100);
+        cancelButton.setPrefWidth(100);
+        helpButton.setPrefWidth(100);
 
         submitButton.getStyleClass().add("action-button");
         cancelButton.getStyleClass().add("action-button");
+        helpButton.getStyleClass().add("action-button");
 
         submitButton.setOnAction(e -> submitRecognition());
         cancelButton.setOnAction(e -> recognitionStage.close());
+        helpButton.setOnAction(e -> ToastUtils.showToast(recognitionStage.getScene(), "Fill all fields and select applicable mindsets before submitting."));
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        HBox buttonBox = new HBox(10, spacer, submitButton, cancelButton);
-        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+        HBox buttonBox = new HBox(15, submitButton, cancelButton, helpButton);
+        buttonBox.setAlignment(Pos.CENTER_LEFT);
         buttonBox.setPadding(new Insets(10, 0, 0, 0));
 
         //Status Label
         statusLabel = new Label();
         statusLabel.setStyle("-fx-text-fill: red; -fx-font-style: italic;");
-        VBox.setMargin(statusLabel, new Insets(0, 0, 5, 0));
 
         // Main Layout
         VBox layout = new VBox(15, topSection, bottomSection, buttonBox, statusLabel);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #ffffff;");
+        
+//        //Adds a large, centered background watermark star
+//        ImageView backgroundStar = new ImageView(
+//        		new Image(getClass().getResource("/application/star.png").toExternalForm())
+//        		);
+//        backgroundStar.setOpacity(0.10);
+//        backgroundStar.setEffect(new GaussianBlur(3)); //adds a light blur effect to simulate paper printing
+//        backgroundStar.setPreserveRatio(true);
+//        backgroundStar.setFitWidth(300);
+//        backgroundStar.setSmooth(true);
+//        //backgroundStar.setRotate(-10);
+//        
+//        
+//        //stackpane to overlay the form on top of the watermark
+//        StackPane backgroundLayer = new StackPane(backgroundStar, layout);
+//        backgroundLayer.setAlignment(Pos.CENTER);
+//        backgroundLayer.setPadding(new Insets(15));
+//        backgroundLayer.setStyle("-fx-background-color: #ffffff;");
 
         //Scene
-        Scene scene = new Scene(layout, 600, 480);
+        Scene scene = new Scene(layout, 620, 650);
         scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
+
+
 
         recognitionStage.setScene(scene);
     }

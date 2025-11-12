@@ -1,5 +1,4 @@
 
-
 /* =================== GLOBAL LAYOUT =================== */
 .main-layout {
     -fx-background-color: #f9f9f9;
@@ -228,7 +227,7 @@
 }
 
 .text-field, .password-field {
-    -fx-background-color: white;
+    /*-fx-background-color: white;*/
     -fx-border-color: #0078d7;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
@@ -317,4 +316,3 @@
     -fx-text-fill: white;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.5, 2, 2);
 }
-
