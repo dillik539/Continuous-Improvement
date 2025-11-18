@@ -15,7 +15,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		MainController controller = new MainController(primaryStage);
-		Scene scene = new Scene(controller.getView(), 1000, 800);
+		Scene scene = new Scene(controller.getView(), 1000, 900);
 		//Load the global style sheet
 		scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 		

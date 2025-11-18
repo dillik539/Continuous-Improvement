@@ -42,8 +42,9 @@ public class AdminController {
 
 	public AdminController() {
 		layout = new VBox(10);
-		layout.setPadding(new Insets(20, 20, 40, 20)); //more bottom space
-		
+		layout.setPadding(new Insets(10, 20, 25, 20)); //more bottom space
+		layout.setStyle("-fx-background-color: #f9fbff;");
+
 		//Admin Panel Label
 		Label adminPanelLabel = new Label("Admin Panel");
 		adminPanelLabel.getStyleClass().add("panel-title");
@@ -71,14 +72,18 @@ public class AdminController {
 		HBox.setHgrow(spacer, Priority.ALWAYS);
 		HBox topControls = new HBox(15, processButton, addUserButton, refreshButton, spacer, lastRefreshedLabel);
 		topControls.setAlignment(Pos.CENTER_LEFT);
-
-		//lastRefreshedLabel.setAlignment(Pos.CENTER_RIGHT);
 		
 		//----- Admin Header ----
 		VBox adminHeader = new VBox(10, adminPanelLabel, topControls);
 		adminHeader.getStyleClass().add("panel-header");
 
 		ideaTable = new TableView<>();
+        ideaTable.setPrefHeight(480); //Set larger default height
+        setupTable();
+        
+        //make the table expand vertically with the VBox
+        VBox.setVgrow(ideaTable, Priority.ALWAYS);
+        
 		ideaTable.setRowFactory(tv -> new TableRow<Idea>() {
 			@Override
 			protected void updateItem(Idea item, boolean empty) {
@@ -96,9 +101,6 @@ public class AdminController {
 				}
 			}
 		});
-		setupTable();
-		
-		VBox.setVgrow(ideaTable, Priority.ALWAYS);
 		
 		layout.getChildren().addAll(adminHeader, ideaTable);
 
@@ -110,12 +112,18 @@ public class AdminController {
 		TableColumn<Idea, Integer> userIdCol = new TableColumn<>("Submitted By");
 		//asObject() wraps the primitive int property returned by getUserID() to make it an Integer object.
 		userIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getUserID()).asObject());
-		TableColumn<Idea, String> shortDescCol = new TableColumn<>("Short Description");
-		shortDescCol
-				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getShortDescription()));
+		
 
-		TableColumn<Idea, String> descCol = new TableColumn<>("Idea");
-		descCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFullIdea()));
+		TableColumn<Idea, String> ideaCol = new TableColumn<>("Idea");
+		ideaCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdeaText()));
+		
+		TableColumn<Idea, String> benefitCol = new TableColumn<>("Benefits");
+		benefitCol
+				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBenefits()));
+		
+		TableColumn<Idea, String> commentCol = new TableColumn<>("Comments");
+		commentCol
+				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getComments()));
 
 		TableColumn<Idea, String> dateCol = new TableColumn<>("Date Submitted");
 		dateCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateSubmitted()));
@@ -123,16 +131,16 @@ public class AdminController {
 		TableColumn<Idea, String> statusCol = new TableColumn<>("Status");
 		statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
-		ideaTable.getColumns().addAll(userIdCol,shortDescCol, descCol, dateCol, statusCol);
+		ideaTable.getColumns().addAll(userIdCol,ideaCol, benefitCol, commentCol, dateCol, statusCol);
 	}
 
 	private void loadIdeas() {
 		ObservableList<Idea> ideas = FXCollections.observableArrayList();
 		try (Connection conn = Database.getConnection()) {
-			PreparedStatement stmt = conn.prepareStatement("SELECT user_id, short_description, idea_text, date_submitted, status FROM ideas");
+			PreparedStatement stmt = conn.prepareStatement("SELECT user_id, idea_text, idea_benefits, idea_comments, date_submitted, status FROM ideas");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				ideas.add(new Idea(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+				ideas.add(new Idea(rs.getInt("user_id"), rs.getString("idea_text"), rs.getString("idea_benefits"), rs.getString("idea_comments"), rs.getString("date_submitted"), rs.getString("status"))); //using column names is safer than using column numbers.
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,9 +165,9 @@ public class AdminController {
 
 		try (Connection conn = Database.getConnection()) {
 			PreparedStatement stmt = conn
-					.prepareStatement("UPDATE ideas SET status = 'Processed' WHERE user_id = ? AND short_description = ?");
+					.prepareStatement("UPDATE ideas SET status = 'Processed' WHERE user_id = ? AND idea_text = ?");
 			stmt.setInt(1, selectedIdea.getUserID());
-			stmt.setString(2, selectedIdea.getShortDescription());
+			stmt.setString(2, selectedIdea.getIdeaText());
 			stmt.executeUpdate();
 			loadIdeas();
 		} catch (Exception e) {

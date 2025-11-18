@@ -38,7 +38,7 @@ public class IdeaController {
 	private VBox ideaLayout;
 	private VBox viewLayout;
 	private TextField shortDescriptionField;
-	private TextArea ideaArea;
+	private TextArea ideaArea, ideaBenefitArea, commentArea;
 	private TableView<Idea> ideaTable;
 	private Label lastRefreshedLabel;
 	private Button refreshButton;
@@ -48,7 +48,7 @@ public class IdeaController {
 		this.username = username;
 		
 		mainLayout = new HBox(20); //space between form (left panel) and table (right panel)
-		mainLayout.setPadding(new Insets(20, 20, 40, 20)); //top, right, bottom, left (extra bottom space)
+		mainLayout.setPadding(new Insets(10, 20, 10, 20)); //top, right, bottom, left (extra bottom space)
 		mainLayout.getStyleClass().add("main-layout"); //root styling
 		
 		ideaLayout = new VBox(10); //left side (form)
@@ -66,13 +66,28 @@ public class IdeaController {
 		viewLayout.setMaxWidth(Double.MAX_VALUE);
 		viewLayout.getStyleClass().add("idea-table-section"); // right panel styling
 		
-		shortDescriptionField = new TextField();
-		shortDescriptionField.getStyleClass().add("short-description-field"); //text-field styling
+		//Labels
+		//Label shortDescriptionLabel = new Label("Short Description:");
+		Label ideaLabel = new Label("Describe Your Idea:");
+		Label ideaBenefitLabel = new Label("What are the benifits of your idea?");
+		Label commentSuggestionLabel = new Label("Additional comments or suggestions:");
 		
-		ideaArea = new TextArea();
+		//shortDescriptionField = new TextField();
+		//shortDescriptionField.getStyleClass().add("short-description-field"); //text-field styling
+		
+		ideaArea = new TextArea();//Describe your idea here
 		//Let textArea expand vertically
 		VBox.setVgrow(ideaArea, Priority.ALWAYS);
 		ideaArea.getStyleClass().add("idea-textarea");
+		
+		ideaBenefitArea = new TextArea(); //what are the benefits of your idea
+		VBox.setVgrow(ideaBenefitArea, Priority.ALWAYS);
+		ideaBenefitArea.getStyleClass().add("idea-textarea");
+		
+		commentArea = new TextArea();//Additional comments if you have here(optional)
+		VBox.setVgrow(commentArea, Priority.ALWAYS);
+		commentArea.getStyleClass().add("idea-textarea");
+		
 		
 		refreshButton = new Button("Refresh Now");
 		refreshButton.setOnAction(e -> loadIdeas());
@@ -122,10 +137,12 @@ public class IdeaController {
 		
 		//Left side form
 		ideaLayout.getChildren().addAll(
-				new Label("Short Description"),
-				shortDescriptionField,
-				new Label("Full Idea"),
+				ideaLabel,
 				ideaArea,
+				ideaBenefitLabel,
+				ideaBenefitArea,
+				commentSuggestionLabel,
+				commentArea,
 				submitButton);
 		
 		
@@ -145,12 +162,15 @@ public class IdeaController {
 		TableColumn<Idea, Integer> userIdCol = new TableColumn<>("User ID");
 		//asObject() wraps the primitive int property returned by getUserID() to make it an Integer object.
 		userIdCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getUserID()).asObject());
-		TableColumn<Idea, String> shortDescCol = new TableColumn<>("Short Description");
-		shortDescCol
-				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getShortDescription()));
+		TableColumn<Idea, String> ideaCol = new TableColumn<>("Idea");
+		ideaCol
+				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdeaText()));
 
-		TableColumn<Idea, String> descCol = new TableColumn<>("Idea");
-		descCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFullIdea()));
+		TableColumn<Idea, String> benefitsCol = new TableColumn<>("Benefits");
+		benefitsCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBenefits()));
+		
+		TableColumn<Idea, String> commentCol = new TableColumn<>("Comments");
+		commentCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getComments()));
 
 		TableColumn<Idea, String> dateCol = new TableColumn<>("Date Submitted");
 		dateCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateSubmitted()));
@@ -158,25 +178,17 @@ public class IdeaController {
 		TableColumn<Idea, String> statusCol = new TableColumn<>("Status");
 		statusCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
-		ideaTable.getColumns().addAll(userIdCol,shortDescCol, descCol, dateCol, statusCol);
+		ideaTable.getColumns().addAll(userIdCol,ideaCol, benefitsCol, commentCol, dateCol, statusCol);
 	}
 
 	private void submitIdea() {
 		
-		String shortDesc = shortDescriptionField.getText().trim();
 		String ideaText = ideaArea.getText().trim();
-
+		String benefits = ideaBenefitArea.getText().trim();
+		String comments = commentArea.getText().trim();
 		
-		if(shortDesc.isEmpty() && ideaText.isEmpty()) {
-			showAlert("Submission Error", "Both 'Short Description' and 'Your Idea' cannot be empty!");
-			return;
-		}
-		if(shortDesc.isEmpty()) {
-			showAlert("Submission Error", "Short Description cannot be empty!");
-			return;
-		}
-		if(ideaText.isEmpty()) {
-			showAlert("Submission Error", "Your Idea field cannot be empty!");
+		if(ideaText.isEmpty() || benefits.isEmpty() || comments.isEmpty()) {
+			showAlert("Submission Error", "Please fill all fields to submit your idea!");
 			return;
 		}
 		int userId = findUserId(username);
@@ -191,43 +203,34 @@ public class IdeaController {
 		
 		try (Connection conn = Database.getConnection()) {
 			PreparedStatement stmt = conn.prepareStatement(
-					"INSERT INTO ideas (user_id, short_description, idea_text, date_submitted, status) VALUES (?, ?, ?, ?, ?)");
+					"INSERT INTO ideas (user_id, idea_text, idea_benefits, idea_comments, date_submitted, status) VALUES (?, ?, ?, ?, ?, ?)");
 			stmt.setInt(1, userId);
-			stmt.setString(2, shortDesc);
-			stmt.setString(3, ideaText);
-			stmt.setString(4, formattedCurrentDateTime);
-			stmt.setString(5, "Pending");
+			stmt.setString(2, ideaText);
+			stmt.setString(3, benefits);
+			stmt.setString(4, comments);
+			stmt.setString(5, formattedCurrentDateTime);
+			stmt.setString(6, "Pending");
 			stmt.executeUpdate();
 			clearFields(); //clear all fields to prevent submitting duplicate ideas.
 			loadIdeas();
 			ToastUtils.showToast(mainLayout.getScene(), "Your idea was submitted");
 		} catch (Exception e) {
 			e.printStackTrace();
+			showAlert("Error","Failed to submit idea.");
 		}
 	}
 
 	private void loadIdeas() {
-		/**
-		 * ObservableList<Idea> ideas = FXCollections.observableArrayList(); try
-		 * (Connection conn = Database.getConnection()) { // get user id from the users
-		 * table that can be used to obtain associated ideas String userIdQuery =
-		 * "SELECT id FROM users WHERE username = ?"; PreparedStatement userIdStmt =
-		 * conn.prepareStatement(userIdQuery); userIdStmt.setString(1, username);
-		 * ResultSet userIdRs = userIdStmt.executeQuery();
-		 * 
-		 * int userId = findUserId(username); if (userIdRs.next()) { userId =
-		 * userIdRs.getInt("id"); } else { System.out.println("User not found in
-		 * database"); return; // Exit if user not found. }
-		 **/
+		
 		ObservableList<Idea> ideas = FXCollections.observableArrayList();
 		try (Connection conn = Database.getConnection()) {
-			String ideaQuery = "SELECT user_id, short_description, idea_text, date_submitted, status FROM ideas WHERE user_id= ?";
+			String ideaQuery = "SELECT user_id, idea_text, idea_benefits, idea_comments, date_submitted, status FROM ideas WHERE user_id= ?";
 			int userId = findUserId(username);
 			PreparedStatement stmt = conn.prepareStatement(ideaQuery);
 			stmt.setInt(1, userId);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				ideas.add(new Idea(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+				ideas.add(new Idea(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)));
 			}
 		} catch (
 

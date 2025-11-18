@@ -5,15 +5,17 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Idea {
 	private final SimpleIntegerProperty userID;
-	private final SimpleStringProperty shortDescription;
-	private final SimpleStringProperty fullIdea;
+	private final SimpleStringProperty ideaText;
+	private final SimpleStringProperty benefits;
+	private final SimpleStringProperty comments;
 	private final SimpleStringProperty dateSubmitted;
 	private final SimpleStringProperty status;
 
-	public Idea(Integer userID,String shortDescription, String fullIdea, String dateSubmitted, String status) {
+	public Idea(Integer userID, String ideaText,String benefits, String comments, String dateSubmitted, String status) {
 		this.userID = new SimpleIntegerProperty(userID);
-		this.shortDescription = new SimpleStringProperty(shortDescription);
-		this.fullIdea = new SimpleStringProperty(fullIdea);
+		this.ideaText = new SimpleStringProperty(ideaText);
+		this.benefits = new SimpleStringProperty(benefits);
+		this.comments = new SimpleStringProperty(comments);
 		this.dateSubmitted = new SimpleStringProperty(dateSubmitted);
 		this.status = new SimpleStringProperty(status);
 	}
@@ -22,20 +24,27 @@ public class Idea {
 		return userID.get();
 	}
 
-	public String getShortDescription() {
-		return shortDescription.get();
+	public String getIdeaText() {
+		return ideaText.get();
 	}
 
-	public void setShortDescription(String value) {
-		shortDescription.set(value);
+	public void setIdeaText(String value) {
+		ideaText.set(value);
 	}
 
-	public String getFullIdea() {
-		return fullIdea.get();
+	public String getBenefits() {
+		return benefits.get();
 	}
 
-	public void setFullIdea(String value) {
-		fullIdea.set(value);
+	public void setBenefits(String value) {
+		benefits.set(value);
+	}
+	public String getComments() {
+		return comments.get();
+	}
+	
+	public void setComments(String value) {
+		comments.set(value);
 	}
 
 	public String getDateSubmitted() {
